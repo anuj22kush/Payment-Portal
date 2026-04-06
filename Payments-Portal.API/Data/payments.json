@@ -1,0 +1,10 @@
+[
+  {
+    "Id": "bbda4641-225f-438a-9eba-f816cd72c98f",
+    "Reference": "PAY-20260404-0002",
+    "Amount": 2,
+    "Currency": "EUR",
+    "CreatedAt": "2026-04-04T19:58:07.0420419Z",
+    "ClientRequestId": "e7463a15-93b3-4a15-8c00-3738bca18285"
+  }
+]

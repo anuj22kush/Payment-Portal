@@ -1,23 +1,69 @@
+# ===== .NET / C# =====
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio cache/options directory
+.vs/
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# ReSharper is a .NET coding add-in
+.idea/
+*.sln.iml
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# Rider IDE
+.idea/
+*.sln.iml
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+.nuget/
+
+# ===== Angular / Node.js =====
 # Angular specific
-/dist/
-/out-tsc/
-/tmp/
-/coverage/
-/e2e/test-output/
-/.angular/
+dist/
+out-tsc/
+tmp/
+coverage/
+e2e/test-output/
 .angular/
+.angular-cli.json
 
 # Node modules and dependency files
-/node_modules/
-/package-lock.json
-/yarn.lock
+node_modules/
+package-lock.json
+yarn.lock
 
 # Environment files
-/.env
-
-# Angular CLI and build artefacts
-/.angular-cli.json
-/.ng/
+.env
+.env.local
+.env.*.local
 
 # TypeScript cache
 *.tsbuildinfo
@@ -26,3 +72,46 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+lerna-debug.log*
+
+# ===== IDE Specific =====
+# Visual Studio
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.vs/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# WebStorm
+.idea/
+*.iml
+
+# ===== OS Specific =====
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+*.swp
+*.swo
+*~
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Linux
+.directory
+
+# ===== Application Specific =====
+# Local data files
+Data/payments.json
+!Data/payments.json.sample
+
+# Local settings
+appsettings.local.json
+appsettings.Development.local.json

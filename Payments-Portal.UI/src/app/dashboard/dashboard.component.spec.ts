@@ -1,0 +1,138 @@
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { of, throwError, Subject } from 'rxjs';
+import { RouterModule } from '@angular/router';
+
+import { DashboardComponent } from './dashboard.component';
+import { PaymentsService } from '../payments.service';
+import { PaymentDto } from '../models/payment.model';
+
+describe('DashboardComponent', () => {
+  let component: DashboardComponent;
+  let fixture: ComponentFixture<DashboardComponent>;
+  let mockPaymentsService: jasmine.SpyObj<PaymentsService>;
+
+  const mockPayments: PaymentDto[] = [
+    { id: '1', reference: 'PAY-20260405-0001', amount: 100, currency: 'USD', createdAt: '2026-04-05T10:00:00Z' },
+    { id: '2', reference: 'PAY-20260405-0002', amount: 250, currency: 'EUR', createdAt: '2026-04-05T11:00:00Z' }
+  ];
+
+  beforeEach(async () => {
+    mockPaymentsService = jasmine.createSpyObj('PaymentsService', ['getPayments', 'deletePayment']);
+    mockPaymentsService.getPayments.and.returnValue(of(mockPayments));
+    mockPaymentsService.deletePayment.and.returnValue(of(void 0));
+
+    await TestBed.configureTestingModule({
+      imports: [DashboardComponent, RouterModule.forRoot([])],
+      providers: [
+        { provide: PaymentsService, useValue: mockPaymentsService }
+      ]
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(DashboardComponent);
+    component = fixture.componentInstance;
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should load payments on init', fakeAsync(() => {
+    fixture.detectChanges();
+    tick();
+
+    expect(mockPaymentsService.getPayments).toHaveBeenCalled();
+    expect(component.payments.length).toBe(2);
+    expect(component.loading).toBeFalse();
+  }));
+
+  it('should display payments in the table', fakeAsync(() => {
+    fixture.detectChanges();
+    tick();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const rows = compiled.querySelectorAll('tbody tr');
+    expect(rows.length).toBe(2);
+  }));
+
+  it('should display payment reference in table', fakeAsync(() => {
+    fixture.detectChanges();
+    tick();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('PAY-20260405-0001');
+    expect(compiled.textContent).toContain('PAY-20260405-0002');
+  }));
+
+  it('should show "No payments found" when list is empty', fakeAsync(() => {
+    mockPaymentsService.getPayments.and.returnValue(of([]));
+
+    fixture.detectChanges();
+    tick();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('No payments found');
+  }));
+
+  it('should show loading indicator while fetching', () => {
+    // Use a Subject so the observable does NOT complete synchronously
+    const subject = new Subject<PaymentDto[]>();
+    mockPaymentsService.getPayments.and.returnValue(subject.asObservable());
+
+    fixture.detectChanges(); // triggers ngOnInit → loadPayments → loading = true
+
+    expect(component.loading).toBeTrue();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.textContent).toContain('Loading payments...');
+
+    // Now emit data and verify loading goes away
+    subject.next(mockPayments);
+    subject.complete();
+    fixture.detectChanges();
+    expect(component.loading).toBeFalse();
+  });
+
+  it('should handle error when loading payments', fakeAsync(() => {
+    spyOn(console, 'error');
+    mockPaymentsService.getPayments.and.returnValue(throwError(() => new Error('Network error')));
+
+    component.loadPayments();
+    tick();
+
+    expect(component.loading).toBeFalse();
+    expect(component.payments.length).toBe(0);
+  }));
+
+  it('should call deletePayment and reload', fakeAsync(() => {
+    fixture.detectChanges();
+    tick();
+
+    spyOn(window, 'confirm').and.returnValue(true);
+    component.deletePayment('1');
+    tick();
+
+    expect(mockPaymentsService.deletePayment).toHaveBeenCalledWith('1');
+    // getPayments called once on init, once after delete
+    expect(mockPaymentsService.getPayments).toHaveBeenCalledTimes(2);
+  }));
+
+  it('should NOT call deletePayment if user cancels confirm', fakeAsync(() => {
+    fixture.detectChanges();
+    tick();
+
+    spyOn(window, 'confirm').and.returnValue(false);
+    component.deletePayment('1');
+    tick();
+
+    expect(mockPaymentsService.deletePayment).not.toHaveBeenCalled();
+  }));
+
+  it('should have an "Add Payment" link', fakeAsync(() => {
+    fixture.detectChanges();
+    tick();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const addLink = compiled.querySelector('a[href="/new"]');
+    expect(addLink).toBeTruthy();
+    expect(addLink?.textContent).toContain('Add Payment');
+  }));
+});

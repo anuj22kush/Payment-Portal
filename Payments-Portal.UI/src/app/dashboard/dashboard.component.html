@@ -1,0 +1,36 @@
+<div class="dashboard-container">
+    <div class="header">
+        <h2>Payments Portal</h2>
+        <a routerLink="/new" class="btn btn-primary">Add Payment</a>
+    </div>
+
+    <div *ngIf="loading" class="loading">Loading payments...</div>
+
+    <table *ngIf="!loading && payments.length > 0" class="payments-table">
+        <thead>
+            <tr>
+                <th>Reference</th>
+                <th>Amount</th>
+                <th>Currency</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let payment of payments">
+                <td>{{ payment.reference }}</td>
+                <td>{{ payment.amount | number:'1.2-2' }}</td>
+                <td>{{ payment.currency }}</td>
+                <td>{{ payment.createdAt | date:'medium' }}</td>
+                <td class="actions">
+                    <a [routerLink]="['/edit', payment.id]" class="btn btn-secondary btn-sm">Edit</a>
+                    <button (click)="deletePayment(payment.id)" class="btn btn-danger btn-sm">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div *ngIf="!loading && payments.length === 0" class="no-data">
+        No payments found. Click "Add Payment" to create one.
+    </div>
+</div>
