@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaymentsService } from '../payments.service';
@@ -20,13 +20,13 @@ export class PaymentFormComponent implements OnInit {
 
   readonly currencies = SUPPORTED_CURRENCIES;
 
-  constructor(
-    private fb: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router,
-    private paymentsService: PaymentsService,
-    private clientRequestIdService: ClientRequestIdService
-  ) {
+  private readonly fb = inject(FormBuilder);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly paymentsService = inject(PaymentsService);
+  private readonly clientRequestIdService = inject(ClientRequestIdService);
+
+  constructor() {
     this.paymentForm = this.fb.group({
       amount: [null, [Validators.required, Validators.min(0.01)]],
       currency: ['USD', Validators.required]

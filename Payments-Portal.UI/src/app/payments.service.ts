@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PaymentDto, CreatePaymentRequest, UpdatePaymentRequest } from './models/payment.model';
@@ -9,8 +9,7 @@ import { environment } from '../environments/environment';
 })
 export class PaymentsService {
   private readonly apiUrl = `${environment.apiBaseUrl}/payments`;
-
-  constructor(private http: HttpClient) { }
+  private readonly http = inject(HttpClient);
 
   getPayments(): Observable<PaymentDto[]> {
     return this.http.get<PaymentDto[]>(this.apiUrl);

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { PaymentsService } from '../payments.service';
 import { PaymentDto } from '../models/payment.model';
@@ -15,10 +15,8 @@ export class DashboardComponent implements OnInit {
   loading = false;
   errorMessage: string | null = null;
 
-  constructor(
-    private paymentsService: PaymentsService,
-    private route: ActivatedRoute
-  ) { }
+  private readonly paymentsService = inject(PaymentsService);
+  private readonly route = inject(ActivatedRoute);
 
   ngOnInit(): void {
     // Get payments from resolver

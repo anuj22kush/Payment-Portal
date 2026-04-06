@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -14,7 +14,7 @@ export interface PaymentsResolverData {
   providedIn: 'root'
 })
 export class PaymentsResolver implements Resolve<PaymentsResolverData> {
-  constructor(private paymentsService: PaymentsService) { }
+  private readonly paymentsService = inject(PaymentsService);
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<PaymentsResolverData> {
     return this.paymentsService.getPayments().pipe(

@@ -6,5 +6,13 @@
     "Currency": "USD",
     "CreatedAt": "2026-04-06T16:55:50.0202084Z",
     "ClientRequestId": "9d78e1c3-f4fc-4b15-a79e-3ae0daa97365"
+  },
+  {
+    "Id": "f67caca3-f960-434a-acf4-943ee1e1b9b5",
+    "Reference": "PAY-20260406-0002",
+    "Amount": 500,
+    "Currency": "INR",
+    "CreatedAt": "2026-04-06T17:07:16.0188251Z",
+    "ClientRequestId": "a451e88e-ed59-4770-b1b1-5359c4e0296f"
   }
 ]
