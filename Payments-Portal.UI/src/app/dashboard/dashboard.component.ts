@@ -1,27 +1,38 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { PaymentsService } from '../payments.service';
 import { PaymentDto } from '../models/payment.model';
-import { DecimalPipe, DatePipe } from '@angular/common';
+import { DecimalPipe, DatePipe, CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterLink, DecimalPipe, DatePipe],
+  imports: [RouterLink, DecimalPipe, DatePipe, CommonModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
   payments: PaymentDto[] = [];
   loading = false;
+  errorMessage: string | null = null;
 
-  constructor(private paymentsService: PaymentsService) { }
+  constructor(
+    private paymentsService: PaymentsService,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
-    this.loadPayments();
+    // Get payments from resolver
+    const resolvedData = this.route.snapshot.data['payments'];
+    
+    if (resolvedData) {
+      this.payments = resolvedData.payments || [];
+      this.errorMessage = resolvedData.error || null;
+    }
   }
 
   loadPayments() {
     this.loading = true;
+    this.errorMessage = null;
     this.paymentsService.getPayments().subscribe({
       next: (data) => {
         this.payments = data;
@@ -29,6 +40,7 @@ export class DashboardComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error fetching payments', err);
+        this.errorMessage = 'Failed to load payments. Please try again.';
         this.loading = false;
       }
     });

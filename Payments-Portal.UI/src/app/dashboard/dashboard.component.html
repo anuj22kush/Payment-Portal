@@ -4,6 +4,13 @@
         <a routerLink="/new" class="btn btn-primary">Add Payment</a>
     </div>
 
+    @if (errorMessage) {
+        <div class="alert alert-error">
+            {{ errorMessage }}
+            <button class="btn btn-sm" (click)="loadPayments()">Retry</button>
+        </div>
+    }
+
     @if (loading) {
         <div class="loading">Loading payments...</div>
     }
@@ -36,7 +43,7 @@
         </table>
     }
 
-    @if (!loading && payments.length === 0) {
+    @if (!loading && payments.length === 0 && !errorMessage) {
         <div class="no-data">
             No payments found. Click "Add Payment" to create one.
         </div>
