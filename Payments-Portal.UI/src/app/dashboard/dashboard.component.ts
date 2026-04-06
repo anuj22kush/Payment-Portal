@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { PaymentsService } from '../payments.service';
 import { PaymentDto } from '../models/payment.model';
+import { DecimalPipe, DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, RouterLink],
+  imports: [RouterLink, DecimalPipe, DatePipe],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
   payments: PaymentDto[] = [];

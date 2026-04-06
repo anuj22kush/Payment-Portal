@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaymentsService } from '../payments.service';
@@ -8,9 +7,9 @@ import { SUPPORTED_CURRENCIES } from '../models/payment.constants';
 
 @Component({
   selector: 'app-payment-form',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './payment-form.component.html',
-  styleUrl: './payment-form.component.css'
+  styleUrl: './payment-form.component.scss'
 })
 export class PaymentFormComponent implements OnInit {
   paymentForm: FormGroup;
